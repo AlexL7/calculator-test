@@ -28,6 +28,49 @@ $(document).ready(function() {
     });
 
    $("#equals").click(function(){
+    display.val(calculate(parseEquation(equation)));
+    equation = '';
+
+
+
 
     });
+
+
+   function parseEquation(string){
+
+      let operation=[];
+      let currentNum = '';
+
+      for(var i=0, char; char = string.charAt(i); i++){
+        //check if character is an operation, if true, adds the current number an operation to array and resets current.
+        if ('*/+-'.indexOf(char) > -1) {
+          //checks for negative sign
+          if (currentNum == '' && char == '-') {
+                currentNum = '-';
+            } else {
+              operation.push(parseFloat(currentNum),char);
+              currentNum = '';
+            }
+        } else {
+          currentNum += string.charAt(i);
+        }
+      }
+      //adds last number to array
+      if (currentNum != '') {
+        operation.push(parseFloat(currentNum));
+      }
+      return operation;
+   };
+
+
+   function paraentheses(equation){
+    test =
+   }
+
+
+
 });
+
+
+
