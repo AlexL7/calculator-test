@@ -51,7 +51,7 @@ input[type=button]:hover {
     cursor: pointer;
 }
 
-/*Highlight Equals botton for style */
+/*Highlight Equals botton */
 input[name=equal] {
     background-color: #5cd65c;
     background-image: linear-gradient(top, #5cd65c, #4787ed);
