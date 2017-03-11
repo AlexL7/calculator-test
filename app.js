@@ -1,14 +1,11 @@
 'use strict'
 //server setup
+const PORT = 3000;
 const express = require('express');
 const app = express();
 
-//Only need one request to homepage
-app.set("view engine", "pug");
-app.get('/', function (req, res){
-  res.render('index');
-});
+app.use(express.static('public'));
 
-app.listen(3000, function() {
-  console.log('App listeing on port 3000');
+app.listen(PORT,() => {
+  console.log('App listeing on port '+ PORT);
 })
