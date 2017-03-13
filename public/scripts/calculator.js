@@ -9,48 +9,75 @@ $(document).ready(function() {
 
     var displayLength = function(string){
       if (string.length > 12){
-        display.val("Err: Max");
+        display.text("Err: Max");
       }
+    }
+
+    var countDecimals = function (value){
+      if((value % 1) != 0)
+        return value.toString().split(".")[1].length;
+      return 0;
     }
 
   // Numbers added to display and equation
      $("[name=number]").click(function(){
+         if(equation.length > 12){
+          displayLength(equation);
+          return;
+         }
          if(equation == "0"){
           equation = '';
          }
          equation += ($(this).val());
-         display.val(equation);
+         display.text(equation);
          displayLength(equation);
     });
   // Operations added to display and equation
    $("[name=operator]").not("#clear,#clearAll").click(function(){
+         if(equation.length >12){
+          displayLength(equation);
+          return;
+         }
          if(equation == "0"){
           equation = '';
          }
          equation += ($(this).val());
-         display.val(equation);
+         display.text(equation);
          displayLength(equation);
     });
 
    $("#clear").click(function(){
          equation = equation.slice(0,-1);
-         display.val(equation);
+         display.text(equation);
          if(equation.length < 1){
-          display.val("0");
+          display.text("0");
          }
     });
 
    $("#clearAll").click(function(){
-         display.val("0");
+         display.text("0");
          equation = "0";
     });
 
    $("#equals").click(function(){
+    if(equation.length >12){
+      displayLength(equation);
+          return;
+         }
     memory =  calculate(paraentheses(parseEquation(equation)));
     console.log("Answer is : "+ memory);
-    display.val(memory.toString());
-    equation = memory.toString();
-    console.log(equation);
+    if(countDecimals(memory) > 5){
+         var newNum = memory.toFixed(5).toString();
+         display.text(newNum);
+         equation = newNum;
+
+    } else {
+         display.text(memory.toString());
+         equation = memory.toString();
+
+
+    }
+
     });
 
 
@@ -171,7 +198,7 @@ $(document).ready(function() {
     console.log('Error: unable to resolve calculation');
     return calc;
   } else {
-    return calc[0];
+    return  calc[0];
   }
 }
 
