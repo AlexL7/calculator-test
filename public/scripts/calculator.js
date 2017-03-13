@@ -6,6 +6,13 @@ $(document).ready(function() {
     let display = $("#display");
     display.val("0");
 
+
+    var displayLength = function(string){
+      if (string.length > 12){
+        display.val("Err: Max");
+      }
+    }
+
   // Numbers added to display and equation
      $("[name=number]").click(function(){
          if(equation == "0"){
@@ -13,6 +20,7 @@ $(document).ready(function() {
          }
          equation += ($(this).val());
          display.val(equation);
+         displayLength(equation);
     });
   // Operations added to display and equation
    $("[name=operator]").not("#clear,#clearAll").click(function(){
@@ -21,6 +29,7 @@ $(document).ready(function() {
          }
          equation += ($(this).val());
          display.val(equation);
+         displayLength(equation);
     });
 
    $("#clear").click(function(){
@@ -33,24 +42,15 @@ $(document).ready(function() {
 
    $("#clearAll").click(function(){
          display.val("0");
-         equation = "";
+         equation = "0";
     });
 
    $("#equals").click(function(){
-    equation = calculate(paraentheses(parseEquation(equation)));
-
-    console.log(equation);
-    memory += parseFloat(equation);
+    memory =  calculate(paraentheses(parseEquation(equation)));
+    console.log("Answer is : "+ memory);
     display.val(memory.toString());
-
-    console.log(memory);
-    equation = '0';
-
-
-
-
-
-
+    equation = memory.toString();
+    console.log(equation);
     });
 
 
@@ -88,6 +88,8 @@ $(document).ready(function() {
       return operation;
    };
 
+   function absVal(num){
+            return num < 0 ? -num:num; }
 
    function paraentheses(arrEquation){
     var newOperation = [];
@@ -99,25 +101,33 @@ $(document).ready(function() {
       //checks for paraentheses then runs calculate of everything inside and pushes to newoperation
       if(arrEquation[i] == "("){
         let tempCalc = [];
+        let tempNum;
         let indexOfPar = [];
+
         indexOfPar.push(tempEquation.indexOf("(", i),tempEquation.indexOf(")", i));
         tempCalc = tempEquation.slice(indexOfPar[0]+1,indexOfPar[1]);
 
+        if(calculate(tempCalc) < 0){
+          newOperation.push("-",absVal(calculate(tempCalc)));
+        } else {
+          newOperation.push(calculate(tempCalc));
+        }
 
-        newOperation.push(calculate(tempCalc));
 
         i = indexOfPar[1];
         }
       else{
+        if(parseFloat(arrEquation[i]) < 0){
+          newOperation.push("-",absVal(arrEquation[i].toString()));
+        } else {
         newOperation.push(arrEquation[i]);
       }
     }
-
-
+    }
       console.log("new Operation: " + newOperation);
 
-      return newOperation;
 
+      return newOperation;
     }
 
 
