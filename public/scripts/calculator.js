@@ -19,48 +19,59 @@ $(document).ready(function() {
       return 0;
     }
 
-  // Numbers added to display and equation
-     $("[name=number]").click(function(){
-         if(equation.length > 12){
-          displayLength(equation);
-          return;
-         }
-         if(equation == "0"){
-          equation = '';
-         }
-         equation += ($(this).val());
-         display.text(equation);
-         displayLength(equation);
-    });
-  // Operations added to display and equation
-   $("[name=operator]").not("#clear,#clearAll").click(function(){
-         if(equation.length >12){
-          displayLength(equation);
-          return;
-         }
-         if(equation == "0"){
-          equation = '';
-         }
-         equation += ($(this).val());
-         display.text(equation);
-         displayLength(equation);
-    });
 
-   $("#clear").click(function(){
-         equation = equation.slice(0,-1);
+
+
+    //functions for calculator keys
+    var _numCB = function(num){
+        if(equation.length > 12){
+          displayLength(equation);
+          return;
+         }
+         if(equation == "0"){
+          equation = '';
+         }
+
+         if('.0987654321'.indexOf(num) > -1){
+          equation += num.toString()
+         } else {
+          equation += $(this).val();
+         }
+         display.text(equation);
+         displayLength(equation);
+    }
+
+    var _opsCB = function(num){
+      if(equation.length >12){
+          displayLength(equation);
+          return;
+         }
+         if(equation == "0"){
+          equation = '';
+         }
+
+
+
+          if('()/*+-'.indexOf(num) > -1){
+          equation += num.toString()
+         } else {
+          equation += $(this).val();
+         }
+         display.text(equation);
+         displayLength(equation);
+
+    }
+
+    var _clearCB = function(){
+      equation = equation.slice(0,-1);
          display.text(equation);
          if(equation.length < 1){
           display.text("0");
          }
-    });
+    }
 
-   $("#clearAll").click(function(){
-         display.text("0");
-         equation = "0";
-    });
-
-   $("#equals").click(function(){
-    if(equation.length >12){
+    var _equalsCB = function () {
+      if(equation.length >12){
       displayLength(equation);
           return;
          }
@@ -74,11 +85,33 @@ $(document).ready(function() {
     } else {
          display.text(memory.toString());
          equation = memory.toString();
+    }
+    };
+
+    //jQuery for onclick calling approriate functions.
+   $("[name=number]").click(_numCB);
+   $("[name=operator]").not("#clear,#clearAll").click(_opsCB);
+   $("#clear").click(_clearCB);
+   $("#clearAll").click(function(){
+         display.text("0");
+         equation = "0";
+    });
+   $("#equals").click(_equalsCB);
 
 
+    //jQuery for onclick calling approriate functions.
+   $(document).keydown(function(){
+    if(event.which == 13) {_equalsCB()}; //=
+    if(event.which == 8) {_clearCB()}; // backspace
+
+   var eventString =  String.fromCharCode(event.keyCode);
+    if('()*/+-.0987654321'.indexOf(eventString) > -1){
+      _numCB(eventString);
+      _opsCB(eventString);
     }
 
-    });
+
+   });
 
 
    function parseEquation(string){
