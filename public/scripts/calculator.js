@@ -1,9 +1,9 @@
 'use strict'
 
 $(document).ready(function() {
-  let equation = "0";
-  let memory = 0;
-  let display = $("#display");
+  var equation = "0";
+  var memory = 0;
+  var display = $("#display");
   display.val("0");
 
 
@@ -40,12 +40,15 @@ $(document).ready(function() {
   }
 
   var _opsCB = function(op) {
+    let opsArr = ["/", "*", "+","-",")","("];
+
     if (equation.length > 12) {
       displayLength(equation);
       return;
     }
 
 
+    // condition for key press vs clicked
     if ('()/*+-'.indexOf(op) > -1) {
       if ('('.indexOf(op) > -1 && equation == "0") {
         equation = op.toString();
@@ -65,6 +68,7 @@ $(document).ready(function() {
 
   }
 
+  // backspace function
   var _clearCB = function() {
     equation = equation.slice(0, -1);
     display.text(equation);
@@ -80,7 +84,7 @@ $(document).ready(function() {
       return;
     }
     memory = calculate(paraentheses(parseEquation(equation)));
-    console.log("Answer is : " + memory);
+    console.log("Answer: " + memory);
     if (countDecimals(memory) > 5) {
       var newNum = memory.toFixed(5).toString();
       display.text(newNum);
@@ -122,9 +126,6 @@ $(document).ready(function() {
   });
 
 
-
-
-
   function parseEquation(string) {
 
     let operation = [];
@@ -155,7 +156,9 @@ $(document).ready(function() {
     if (currentNum != '') {
       operation.push(parseFloat(currentNum));
     }
-    console.log("Parse returns this " + operation);
+    console.log("Parse gives: " + operation);
+
+
     return operation;
   };
 
@@ -195,7 +198,7 @@ $(document).ready(function() {
         }
       }
     }
-    console.log("new Operation: " + newOperation);
+    console.log("Operation after paraentheses: " + newOperation);
 
 
     return newOperation;
