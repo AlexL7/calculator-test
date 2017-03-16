@@ -93,6 +93,8 @@ $(document).ready(function() {
     } else {
       display.text(memory.toString());
       equation = memory.toString();
+
+
     }
   };
 
@@ -109,6 +111,7 @@ $(document).ready(function() {
   //jQuery for onclick calling approriate functions.
   $(document).keydown(function() {
     let ek = event.key;
+    console.log(event.key);
     let ops = ["/", "*", "+", "-", "(", ")"];
     let nums = [".", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     if (ops.indexOf(ek) > -1) {
@@ -117,7 +120,7 @@ $(document).ready(function() {
     if (nums.indexOf(ek) > -1) {
       _numCB(ek)
     };
-    if (event.which == 13) {
+    if (event.which == 13 || event.key == "=") {
       _equalsCB()
     }; //=
     if (event.which == 8) {
